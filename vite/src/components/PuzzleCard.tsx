@@ -10,6 +10,8 @@ interface PuzzleCardProps {
 const PuzzleCard: FC<PuzzleCardProps> = ({ index, isMinted }) => {
   const [nftMetadata, setMetadata] = useState<NftMetadata>();
 
+  useEffect(() => console.log(nftMetadata), [nftMetadata]);
+
   const getNftMetadata = async () => {
     try {
       const response = await axios.get<NftMetadata>(
