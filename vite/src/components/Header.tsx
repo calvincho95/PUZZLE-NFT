@@ -30,6 +30,10 @@ const navLinks = [
     name: "Sale",
     path: "/sale",
   },
+  {
+    name: "My",
+    path: "/my",
+  },
 ];
 
 const Header: FC<HeaderProps> = ({ signer, setSigner }) => {

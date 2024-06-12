@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  Image,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -65,11 +66,12 @@ const Mint: FC = () => {
         justifyContent="center"
         alignItems="center"
       >
+        <Image src="/images/dirty.jpeg" alt="바다를 살려내" />
         <Text fontSize={[24, 24, 36]} fontWeight="semibold" mb={8}>
           🐳 NFT를 발행해서 바다를 지켜줘!
         </Text>
         {signer ? (
-          <Flex alignItems="end" gap={[4, 4, 8]} mx={4} mb={16}>
+          <Flex alignItems="end" gap={[4, 4, 8]} mx={4}>
             <Flex flexDir="column" gap={[2, 2, 4]}>
               <Text fontSize={[12, 12, 16]} fontWeight="semibold">
                 NFT ID

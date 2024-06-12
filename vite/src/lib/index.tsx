@@ -1,4 +1,9 @@
-export const useMetamask = async (ethers, setSigner) => {
+import { JsonRpcSigner, ethers } from "ethers";
+import { Dispatch, SetStateAction } from "react";
+
+export const useMetamask = async (
+  setSigner: Dispatch<SetStateAction<JsonRpcSigner | null>>
+) => {
   try {
     if (!window.ethereum) return;
 

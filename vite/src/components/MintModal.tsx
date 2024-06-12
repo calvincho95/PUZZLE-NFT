@@ -1,107 +1,62 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
-import { JsonRpcSigner } from "ethers";
-import { Dispatch, FC, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
-import { useMetamask } from "../lib";
+import { FC } from "react";
 
-interface HeaderProps {
-  signer: JsonRpcSigner | null;
-  setSigner: Dispatch<SetStateAction<JsonRpcSigner | null>>;
+interface MintModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  stsNftMetadata: StsNftMetadata | undefined;
 }
 
-const navLinks = [
-  {
-    name: "Home",
-    path: "/",
-  },
-  {
-    name: "Mint",
-    path: "/mint",
-  },
-  {
-    name: "Sale",
-    path: "/sale",
-  },
-];
-
-const Header: FC<HeaderProps> = ({ signer, setSigner }) => {
-  const navigate = useNavigate();
-
-  const onClickLogOut = () => {
-    setSigner(null);
-  };
-
+const MintModal: FC<MintModalProps> = ({ isOpen, onClose, stsNftMetadata }) => {
   return (
-    <Flex h={20} justifyContent="space-between" alignItems="center" px={4}>
-      <Flex w={40} fontSize={20} fontWeight="semibold">
-        🐢 Save the SEA
-      </Flex>
-      <Flex display={["none", "none", "flex"]} gap={8}>
-        {navLinks.map((v, i) => (
-          <Button
-            key={i}
-            variant="link"
-            colorScheme="blue"
-            onClick={() => navigate(v.path)}
-          >
-            {v.name}
-          </Button>
-        ))}
-      </Flex>
-      <Flex display={["none", "none", "flex"]} w={40} justifyContent="end">
-        {signer ? (
-          <Menu>
-            <MenuButton
-              colorScheme="blue"
-              as={Button}
-              rightIcon={<ChevronDownIcon />}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>🌊 바다를 구했습니다!</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody display="flex" flexDir="column" alignItems="center">
+          <Box pos="relative">
+            <Text
+              pos="absolute"
+              top={2}
+              right={4}
+              fontSize={[16, 16, 20]}
+              fontWeight="semibold"
+              backgroundColor="rgba(255,255,255,0.5)"
+              px={[2, 2, 4]}
+              rounded="full"
             >
-              {signer.address.substring(0, 7)}...
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={onClickLogOut}>로그아웃</MenuItem>
-            </MenuList>
-          </Menu>
-        ) : (
-          <Button colorScheme="blue" onClick={() => useMetamask(setSigner)}>
-            🦊 로그인
-          </Button>
-        )}
-      </Flex>
-      <Flex display={["flex", "flex", "none"]}>
-        <Menu>
-          <MenuButton
-            colorScheme="blue"
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-          >
-            {signer ? `${signer.address.substring(0, 7)}...` : "메뉴"}
-          </MenuButton>
-          <MenuList>
-            {!signer && (
-              <MenuItem onClick={() => useMetamask(setSigner)}>
-                🦊 로그인
-              </MenuItem>
-            )}
-            {navLinks.map((v, i) => (
-              <MenuItem key={i} onClick={() => navigate(v.path)}>
-                {v.name}
-              </MenuItem>
-            ))}
-            {signer && <MenuItem onClick={onClickLogOut}>로그아웃</MenuItem>}
-          </MenuList>
-        </Menu>
-      </Flex>
-    </Flex>
+              x{stsNftMetadata?.amount}
+            </Text>
+            <Image
+              src={`/images/puzzle/${stsNftMetadata?.tokenId}.png`}
+              alt={stsNftMetadata?.name}
+            />
+          </Box>
+          <Text fontSize={[20, 20, 28]} fontWeight="semibold">
+            {stsNftMetadata?.name}
+          </Text>
+          <Text fontSize={[18, 18, 24]}>{stsNftMetadata?.description}</Text>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button onClick={onClose}>Close</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
-export default Header;
+export default MintModal;
