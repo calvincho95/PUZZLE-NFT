@@ -13,7 +13,7 @@ import { OutletContext } from "../components/Layout";
 import PuzzleCard from "../components/PuzzleCard";
 
 const Home: FC = () => {
-  const [mintedList, setMintedList] = useState<boolean[]>([]);
+  const [mintedList, setMintedList] = useState<number[]>([]);
   const [progress, setProgress] = useState<number>(0);
 
   const { signer, mintContract } = useOutletContext<OutletContext>();
@@ -24,9 +24,9 @@ const Home: FC = () => {
     try {
       if (!signer || !mintContract) return;
 
-      const response = await mintContract.checkNfts(signer.address);
+      const response = await mintContract.balanceOfNfts(signer.address);
 
-      const temp = response.map((v: boolean) => v);
+      const temp = response.map((v: bigint) => Number(v));
 
       setMintedList(temp);
     } catch (error) {
@@ -64,7 +64,7 @@ const Home: FC = () => {
         <Text>⛔️ 바다가 위험해! 구해줘! ⛔️</Text>
         <Button
           variant="outline"
-          colorScheme="red"
+          colorScheme="blue"
           onClick={() => navigate("/mint")}
         >
           구하러가기
@@ -89,12 +89,12 @@ const Home: FC = () => {
             </Flex>
             <Grid templateColumns={"repeat(4, 1fr)"}>
               {mintedList.map((v, i) => (
-                <PuzzleCard key={i} index={i} isMinted={v} />
+                <PuzzleCard key={i} index={i} balance={v} />
               ))}
             </Grid>
           </>
         ) : (
-          <Box pos="relative" w={[320, 320, 640]}>
+          <Box pos="relative" w={[320, 320, 640]} mt={[4, 4, 24]}>
             <Box
               pos="absolute"
               top={0}
